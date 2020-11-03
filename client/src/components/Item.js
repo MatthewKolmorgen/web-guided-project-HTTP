@@ -18,6 +18,17 @@ function Item(props) {
     return <h2>Loading item data...</h2>;
   }
 
+  const deleteItem = (e) => {
+    e.preventDefault();
+    axios
+    .delete(`http://localhost:3333/items/${item.id}`)
+    .then(res => {
+      props.setItems(res.data); // set items (application level state) to the new array returned in the response
+      push("/item-list"); // direct the user to the all items ("Shop") view
+    })
+    .catch(err => console.log(err));
+  }
+
   return (
     <div className="item-wrapper">
       <div className="item-header">
@@ -44,10 +55,16 @@ function Item(props) {
         path="/item-list/:id/shipping"
         render={props => <ItemShipping {...props} item={item} />}
       />
-      <button className="md-button">
+      <button 
+        className="md-button"
+        onClick={() => push(`/update-item/${item.id}`)}
+      >
         Edit
       </button>
-      <button className="md-button">
+      <button 
+        className="md-button"
+        onClick={deleteItem}
+      >
         Delete
       </button>
     </div>

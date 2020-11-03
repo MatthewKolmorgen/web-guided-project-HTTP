@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 
@@ -14,6 +14,12 @@ const UpdateForm = props => {
   const { push } = useHistory();
   const [item, setItem] = useState(initialItem);
   const { id } = useParams();
+
+  useEffect(() => {
+    axios.get(`http://localhost:3333/itemById/${id}`)
+    .then(res => setItem(res.data))
+    .catch(err => console.log(err));
+  }, [id]);
 
   const changeHandler = ev => {
     ev.persist();
@@ -31,6 +37,12 @@ const UpdateForm = props => {
   const handleSubmit = e => {
     e.preventDefault();
     // make a PUT request to edit the item
+    axios.put(`http://localhost:3333/items/${id}`, item)
+    .then((res) => {
+      props.setItems(res.data); // update application level state (prop passed in from the Route!)
+      push(`/item-list/${id}`); // direct the user to the single item view for the updated item
+    })
+    .catch(err => console.log(err));
   };
 
   return (

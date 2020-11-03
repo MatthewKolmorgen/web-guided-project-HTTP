@@ -195,6 +195,8 @@ server.post("/items", (req, res) => {
 server.put("/items/:id", (req, res) => {
   const { id } = req.params;
   const { name, price, imageUrl, description, shipping } = req.body;
+  // server is looking for an object like:
+  // {name: '', price: 25, imageUrl: '', description: '', shipping: ''}
   const findItemById = item => {
     return item.id == id;
   };
